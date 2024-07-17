@@ -187,6 +187,14 @@
     analogWrite(mot1,0);
     analogWrite(mot2,0);
   }
+
+ void medir(){
+  lec1 = analogRead(sensor_1);     //lee el valor del sensor 1 y almacenalo en lec1
+  lec2 = analogRead(sensor_2);     //lee el valor del sensor 1 y almacenalo en lec2
+  lec3 = analogRead(sensor_3);     //lee el valor del sensor 1 y almacenalo en lec3
+  lec4 = analogRead(sensor_4);     //lee el valor del sensor 1 y almacenalo en lec4
+  lec5 = analogRead(sensor_5);     //lee el valor del sensor 1 y almacenalo en lec5
+ }
   
 //-------------------------------------------------------------------------------
 
@@ -204,15 +212,8 @@ void setup() {
 }
 
 void loop() {
-  
- // if (lec1 >= 300){
-    
-//  }
-  lec1 = analogRead(sensor_1);     //lee el valor del sensor 1 y almacenalo en lec1
-  lec2 = analogRead(sensor_2);     //lee el valor del sensor 1 y almacenalo en lec2
-  lec3 = analogRead(sensor_3);     //lee el valor del sensor 1 y almacenalo en lec3
-  lec4 = analogRead(sensor_4);     //lee el valor del sensor 1 y almacenalo en lec4
-  lec5 = analogRead(sensor_5);     //lee el valor del sensor 1 y almacenalo en lec5
+ 
+
 /*
   Serial.println("Izquierda_extremo   Izquierda    Centro    Derecha  Derecha_extremo");
   Serial.print("    ");
@@ -229,7 +230,8 @@ void loop() {
   Serial.println("    ");
   delay(300);
 */
-
+  medir();      //lee los sensores
+ 
   //---------00100-------- 
    // 223  740 992 641 593
     //182  745 991 662 607       //Pegado a la ventana
@@ -276,10 +278,11 @@ void loop() {
   if(lec1 < 300 &&  lec2 < 800  && lec3 < 800 && lec4 >= 800 && lec5 >= 800) {
   
       derecha3(velo);
- //     delay(100);
-   //   izquierda2(velo);
-     // delay(20);
-      }  
+      medir();            //vuelve a medir los sensores.
+      if(lec1 < 300 &&  lec2 < 800  && lec3 >= 700 && lec4 >= 700 && lec5 < 700) {
+      izquierda3(velo);  
+      }
+   }  
 
 //---------11000--------
 //   966  961 591 544 570
@@ -342,12 +345,12 @@ void loop() {
     //  derecha2(velo);
       //delay(20);      
      }
-          
-/*//----------------------------Lectura-00000------------------------------------
+/*          
+//----------------------------Lectura-00000------------------------------------
   if(lec1 < 300 &&  lec2 < 800  && lec3 < 800 && lec4 < 800 && lec5 < 800) {
   delay(100);    
     alto();
 
     }  
-    */   
+ */    
  }
