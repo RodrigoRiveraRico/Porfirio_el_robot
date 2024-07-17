@@ -59,8 +59,12 @@
 //                                                                                             //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//                NOTA: FUNCIONA SIN PESO.                        
-//
+//                NOTA: SE OCUPA COMO PESO LAS PINZAS NEGRAS                        
+//    NOTA 2: CON LAS PINZAS EN LAS VUELTAS COMIENZA A GIRAR Y SE PIERDE. SIN PESO, FUNCIONA
+//            BIEN.
+//    NOTA: ROBOT DIÓ 5 VUELTAS EN 1 MIN 40 SEG
+//    NOTA: EN PROMEDIO, UNA VUELTA TARDA 20 SEG
+//          
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //--------------------------Variables------------------------------
 
@@ -97,9 +101,9 @@
   #define in4 8     // Input 4
   
   const byte motores[6] = {in1, in2, mot1, mot2, in3, in4};
-  int velo = 150;         //velocidad a la que girarán las llantas, 1a 200, 2da 150
-  int veloc = 100;
-  int veloci = 50;
+  int velo = 150 + 20;         //velocidad a la que girarán las llantas, 1a 200, 2da 150
+  int veloc = 100 + 10;
+  int veloci = 50 + 10;
 
 
 // Push button
