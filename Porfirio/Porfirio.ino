@@ -180,6 +180,29 @@ void loop() {
     //    delay(20);
   }
 
+  //----------------------------Lectura-01000------------------------------------
+  if (lec1 < umbral_s1 &&  lec2 >= umbral_s2  && lec3 < umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
+    izquierda3();
+    //--
+    //    delay(20);
+    medir();
+    while (lec2 < umbral_s2  && lec3 < umbral_s3) {
+      if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
+        derecha3();
+      }
+      medir();
+    }
+
+
+  }
+
+  //----------------------------Lectura-00010------------------------------------
+  if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 < umbral_s3 && lec4 >= umbral_s4 && lec5 < umbral_s5) {
+    derecha3();
+    //--
+    //    delay(20);
+  }
+
   //---------01100--------
   //   216  987 987 591 498
   // 157  748 991 641 608        //Pegado a la ventana
@@ -187,7 +210,7 @@ void loop() {
   //-----------------------------Lectura-01100-----------------------------------
   if (lec1 < umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     //   digitalWrite(led,1);
-    izquierda1();
+    izquierda4();
     //    delay(20);
     //    derecha2(velo);
     //    delay(10);
@@ -202,7 +225,7 @@ void loop() {
   //-----------------------------Lectura-00110-----------------------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 >= umbral_s4 && lec5 < umbral_s5) {
     //    digitalWrite(led,1);
-    derecha1();
+    derecha4();
     //    delay(20);
     //    derecha2(velo);
     //    delay(10);
@@ -274,20 +297,22 @@ void loop() {
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
 
 
-    izquierda2();
+    izquierda3();
     //    delay(60);
     //  derecha2(velo);
     //delay(20);
+    //--
   }
 
   //-----------------------------Lectura-00001----------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
 
 
-    derecha2();
+    derecha3();
     //    delay(60);
     //  derecha2(velo);
     //delay(20);
+    //--
   }
   /*
     //----------------------------Lectura-00000------------------------------------

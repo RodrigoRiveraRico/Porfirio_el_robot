@@ -1,5 +1,16 @@
+//
+//// En general tenemos que velo > veloc > veloci
+//#define velo  150 + 30 + 10 + 30 + 35        //velocidad a la que girarán las llantas, (1a 185, 2da 220 para que vaya derecho)
+//#define veloc  100 + 10 + 10 + 30 + 35
+//#define veloci  50 + 10 + 10 + 15
+//
+//
+//// Nota: Podemos quitar las últimas sumas para evitar oscilaciones
+//
+
+
 
 // En general tenemos que velo > veloc > veloci
-#define velo  150 + 40 + 30         //velocidad a la que girarán las llantas, (1a 185, 2da 220 para que vaya derecho)
-#define veloc  100 + 20 + 45
-#define veloci  50 + 10 
+#define velo  150 + 30 + 10 + 30        //velocidad a la que girarán las llantas, (1a 185, 2da 220 para que vaya derecho)
+#define veloc  100 + 10 + 10 + 30 
+#define veloci  50 + 10 + 10 
