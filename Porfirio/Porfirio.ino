@@ -60,10 +60,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //
-//  NOTA 2: TIEMPO QUE TARDA EN DAR UNA VUELTA SEGUNDOS. sin peso ver velocidades.h
-//  NOTA 4: Con el ciclo while en el caso 11000 , 00011 , 10000 , 00001 , 01000 y 00010 se logra que saliendo de dicga curva, al leer el sensor central vaya a adelante.
-//  NOTA: Hay que lograr quitar las oscilaciones cuando lee el sensor central y adyacentes.
-//  NOTA: Este programa esta cerca de eliminar oscilaciones, se probó sin peso con velocidades definidas en el apartado 2 de velocidades.h
+//  NOTAS:
+//  -> Con el ciclo while en el caso 11000 , 00011 , 10000 , 00001 , 01000 , 00010 , 01100 y 00110 se logra que, al leer blanco el sensor central, haya redirección.
+//  -> Hay que lograr quitar las oscilaciones cuando lee el sensor central y adyacentes (s2,ss3,s4).
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #include "globales.h"
@@ -79,14 +78,13 @@ int lec2;         //Almacena la lectura del sensor 2
 int lec3;         //Almacena la lectura del sensor 3
 int lec4;         //Almacena la lectura del sensor 4
 int lec5;         //Almacena la lectura del sensor 5
+/*
+  int blanco;                //Variable que dirá cuando estamos en la línea
+  int anterior;              //Variable auxiliar para regresar a la línea blanca
+  int pasadito = 10;         //Valor que al sumar o restar permitirá que gire el seguidor
+*/
 
-//  int sensores[4] = {lec1,lec2,lec3,lec4,lec5};   //almacena la lectura de los sensores
-int blanco;                //Variable que dirá cuando estamos en la línea
-int anterior;              //Variable auxiliar para regresar a la línea blanca
-int pasadito = 10;         //Valor que al sumar o restar permitirá que gire el seguidor
-
-
-//Umbral con valores fijos
+//-------------Umbral con valores fijos------------------------------
 int umbral_s1 = 300;       //Valor umbral del sensor 1
 int umbral_s2 = 800;       //Valor umbral del sensor 2
 int umbral_s3 = 800;       //Valor umbral del sensor 3
@@ -94,7 +92,7 @@ int umbral_s4 = 800;       //Valor umbral del sensor 4
 int umbral_s5 = 800;       //Valor umbral del sensor 5
 
 /*
-  //Umbral con valores calculados en la calibración (ver setup())
+  //-----------Umbral con valores calculados en la calibración (ver setup())-------------
   int umbral_s1;       //Valor umbral del sensor 1
   int umbral_s2;       //Valor umbral del sensor 2
   int umbral_s3;       //Valor umbral del sensor 3
@@ -103,7 +101,7 @@ int umbral_s5 = 800;       //Valor umbral del sensor 5
 */
 
 
-//---------------------------------------Funciones---------------------------------
+//-----------------Función para hacer lectura de sensores---------------------------------
 void medir() {
   lec1 = analogRead(sensor_1);     //lee el valor del sensor 1 y almacenalo en lec1
   lec2 = analogRead(sensor_2);     //lee el valor del sensor 1 y almacenalo en lec2
@@ -124,11 +122,13 @@ void medir() {
     Serial.print(lec5);
     Serial.println("    ");
     Serial.println("    ");
+    //delay(300);
   */
 }
 
 
-//-------------------------------Canción en Buzzer-----------------------------------------
+//--------------------------Canción en Buzzer-----------------------------------------
+//IMPORTANTE: Descomentar la canción que se quiera utilizar.
 //char *song = "MissionImp:d=16,o=6,b=95:32d,32d#,32d,32d#,32d,32d#,32d,32d#,32d,32d,32d#,32e,32f,32f#,32g,g,8p,g,8p,a#,p,c7,p,g,8p,g,8p,f,p,f#,p,g,8p,g,8p,a#,p,c7,p,g,8p,g,8p,f,p,f#,p,a#,g,2d,32p,a#,g,2c#,32p,a#,g,2c,a#5,8c,2p,32p,a#5,g5,2f#,32p,a#5,g5,2f,32p,a#5,g5,2e,d#,8d";
 char *song = "Ionian:d=8,o=5,b=240:c,d,e,f,g,a,b,c6";
 
@@ -153,24 +153,7 @@ void setup() {
 }
 
 void loop() {
-  /*
-    medir();
-    Serial.println("Izquierda_extremo   Izquierda    Centro    Derecha  Derecha_extremo");
-    Serial.print("    ");
-    Serial.print(lec1);
-    Serial.print("          ");
-    Serial.print(lec2);
-    Serial.print("          ");
-    Serial.print(lec3);
-    Serial.print("          ");
-    Serial.print(lec4);
-    Serial.print("          ");
-    Serial.print(lec5);
-    Serial.println("    ");
-    Serial.println("    ");
-    delay(300);
-  */
-  medir();      //lee los sensores
+  medir();      //Lee los sensores
 
   //---------00100--------
   // 223  740 992 641 593
@@ -179,51 +162,27 @@ void loop() {
   //----------------------------Lectura-00100------------------------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     adelante();
-    //    delay(20);
   }
 
   //----------------------------Lectura-01000------------------------------------
   if (lec1 < umbral_s1 &&  lec2 >= umbral_s2  && lec3 < umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
-      izquierda2_2();
+      izquierda21();
       medir();
     }
     //adelante();
-    derecha4();
+    derecha12();
   }
-  //    izquierda2_2();
-  //    //--
-  //    //    delay(20);
-  //    medir();
-  //    if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-  //      derecha3();
-  //    }
-  //    else if (lec1 < umbral_s1 &&  lec2 >= umbral_s2  && lec3 < umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-  //      izquierda1();
-  //    }
-  //
-  //  }
 
   //----------------------------Lectura-00010------------------------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 < umbral_s3 && lec4 >= umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
-      derecha2_2();
+      derecha21();
       medir();
     }
     //adelante();
-    izquierda4();
+    izquierda12();
   }
-  //    derecha2_2();
-  //    //--
-  //    //    delay(20);
-  //    medir();
-  //    if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-  //      izquierda3();
-  //    }
-  //    else if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 < umbral_s3 && lec4 >= umbral_s4 && lec5 < umbral_s5) {
-  //      derecha1();
-  //    }
-  //  }
 
   //---------01100--------
   //   216  987 987 591 498
@@ -232,37 +191,28 @@ void loop() {
   //-----------------------------Lectura-01100-----------------------------------
   if (lec1 < umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
-      izquierda4();
+      //izquierda12();
+      izquierda21(); // Funciona mejor con este giro
       medir();
     }
-    adelante();
+    //adelante();
+    derecha12();
   }
-  //   digitalWrite(led,1);
-  //izquierda4();
-  //    delay(20);
-  //    derecha2(velo);
-  //    delay(10);
-  //    digitalWrite(led,0);
 
   //---------00110--------
   //  166  683 990 973 701
   //  175  784 978 977 627       //Pegado a la ventana
 
-
   //-----------------------------Lectura-00110-----------------------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 >= umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
-      derecha4();
+      //derecha12();
+      derecha21(); // Funciona mejor con este giro
       medir();
     }
-    adelante();
+    //adelante();
+    izquierda12();
   }
-  //    digitalWrite(led,1);
-  //derecha4();
-  //    delay(20);
-  //    derecha2(velo);
-  //    delay(10);
-
 
   //---------00011--------
   //  170  700 557 988 965
@@ -271,20 +221,11 @@ void loop() {
   //-----------------------------Lectura-00011----------------------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 < umbral_s3 && lec4 >= umbral_s4 && lec5 >= umbral_s5) {
     while (lec3 < umbral_s3) {
-      derecha3();
+      derecha31();
       medir();
     }
     adelante();
   }
-
-  //    medir();            //vuelve a medir los sensores.
-  //    if (lec1 < 300 &&  lec2 < 800  && lec3 >= 700 && lec4 >= 800 && lec5 < 700) {
-  //      izquierda3();
-  //    }
-  //    else if (lec1 < 300 &&  lec2 < 800  && lec3 >= 700 && lec4 < 700 && lec5 < 700) {
-  //      adelante();
-  //    }
-  //  }
 
   //---------11000--------
   //   966  961 591 544 570
@@ -294,21 +235,11 @@ void loop() {
   //-----------------------------Lectura-11000----------------------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 < umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
-      izquierda3();
+      izquierda31();
       medir();
     }
     adelante();
   }
-
-
-
-  //    medir();
-  //    if (lec1 < 300 &&  lec2 >= 800  && lec3 >= 700 && lec4 < 700 && lec5 < 700) {
-  //      derecha3();
-  //    }
-  //    else if (lec1 < 300 &&  lec2 < 800  && lec3 >= 700 && lec4 < 700 && lec5 < 700) {
-  //      adelante();
-  //    }
 
   //---------00111--------
   //  147  753 990 989 969
@@ -316,54 +247,35 @@ void loop() {
 
   //-----------------------------Lectura-00111----------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 >= umbral_s4 && lec5 >= umbral_s5) {
-    derecha2();
-    //   delay(120);
-    // izquierda2(velo);
-    // delay(20);
-
-
+    derecha21();
   }
+
   //---------11100--------
   //  980  990 990 614 611
   //  266  993 980 564 562       //Pegado a la ventana
 
   //-----------------------------Lectura-11100----------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-
-
-    izquierda2();
-    //    delay(60);
-    //  derecha2(velo);
-    //delay(20);
+    izquierda21();
   }
 
   //-----------------------------Lectura-10000----------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
-      izquierda3();
+      izquierda31();
       medir();
     }
     adelante();
   }
-
-  //    delay(60);
-  //  derecha2(velo);
-  //delay(20);
-  //--
-
 
   //-----------------------------Lectura-00001----------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
-      derecha3();
+      derecha31();
       medir();
     }
     adelante();
   }
-  //    delay(60);
-  //  derecha2(velo);
-  //delay(20);
-  //--
 
   /*
     //----------------------------Lectura-00000------------------------------------

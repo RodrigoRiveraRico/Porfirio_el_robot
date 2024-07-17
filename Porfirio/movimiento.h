@@ -2,16 +2,18 @@
 void setup_movimiento();
 
 void adelante();
-void izquierda1();
-void derecha1();
-void izquierda2();
-void derecha2();
-void izquierda2_2();
-void derecha2_2();
-void izquierda3();
-void derecha3();
-void izquierda3_2();
-void derecha3_2();
-void izquierda4();
-void derecha4();
+
+void izquierda11();
+void derecha11();
+void izquierda12();
+void derecha12();
+
+void izquierda21();
+void derecha21();
+
+void izquierda31();
+void derecha31();
+void izquierda32();
+void derecha32();
+
 void alto();

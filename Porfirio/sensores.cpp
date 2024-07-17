@@ -1,20 +1,21 @@
 #include <Arduino.h>
 #include "globales.h"
 
-const byte sensores[5] = {sensor_1, sensor_2, sensor_3, sensor_4, sensor_5};
+//------------------------Variables-----------------------------------------------
+int prom_s1 = 0;       //Lectura promedio del sensor 1
+int prom_s2 = 0;       //Lectura promedio del sensor 2
+int prom_s3 = 0;       //Lectura promedio del sensor 3
+int prom_s4 = 0;       //Lectura promedio del sensor 4
+int prom_s5 = 0;       //Lectura promedio del sensor 5
 
-int prom_s1 = 0;       //Valor umbral del sensor 1
-int prom_s2 = 0;       //Valor umbral del sensor 2
-int prom_s3 = 0;       //Valor umbral del sensor 3
-int prom_s4 = 0;       //Valor umbral del sensor 4
-int prom_s5 = 0;       //Valor umbral del sensor 5
-
+//-------------------------setup--------------------------------------------------
 void setup_sensores() {
+  const byte sensores[5] = {sensor_1, sensor_2, sensor_3, sensor_4, sensor_5};
   for (int i = 0; i < 5; i++) {
     pinMode(sensores[i], INPUT); // Sensores como entrada
   }
 }
-
+//---------------Indicador LED-----------
 void confirmacion() {
   for (int i = 0; i < 2; i++) {
     digitalWrite(led, 0);
@@ -23,7 +24,7 @@ void confirmacion() {
     delay(500);
   }
 }
-
+//-----------------Calibración sensores--------------------
 void calibrar() {
   int j;
   byte contador = 0;
@@ -122,8 +123,7 @@ void calibrar() {
   }
   Serial.print("Terminamos");
 }
-
-//-----------------Funciones que devuelven el valor umbral calculado del promedio de lecturas
+//-----------------Funciones que devuelven el promedio de lecturas-----------
 int UMBRAL_S1() {
   return prom_s1;
 }
