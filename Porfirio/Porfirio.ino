@@ -59,10 +59,11 @@
 //                                                                                             //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//  NOTA: SE BUSCA LA VELOCIDAD MÁXIMA CON LA QUE PUEDE FUNCIONAR EL ROBOT CON PESO.
-//  NOTA 2: TIEMPO QUE TARDA EN DAR UNA VUELTA 15.8 SEGUNDOS.
-//  NOTA 3: Modificación a partir de la versión 5
-//  NOTA 4: En esta version el robot llega a dar vueltas de 90 grados y cambia de dirección
+//  
+//  NOTA 2: TIEMPO QUE TARDA EN DAR UNA VUELTA 18.16 SEGUNDOS. sin peso.
+//    16Segundos con peso. Ver velocidades.h
+//  NOTA 4: Con el ciclo while en el caso 11000 , 0011 , 10000 y 00001 se logra que saliendo de dicga curva, al leer el sensor central vaya a adelante.
+//  NOTA: Hay que lograr quitar las oscilaciones cuando lee el sensor central y adyacentes.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #include "globales.h"
@@ -187,13 +188,12 @@ void loop() {
     //--
     //    delay(20);
     medir();
-    while (lec2 < umbral_s2  && lec3 < umbral_s3) {
-      if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-        derecha3();
-      }
-      medir();
+    if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
+      derecha3();
     }
-
+    else if (lec1 < umbral_s1 &&  lec2 >= umbral_s2  && lec3 < umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
+      izquierda1();
+    }
 
   }
 
@@ -202,6 +202,13 @@ void loop() {
     derecha2_2();
     //--
     //    delay(20);
+    medir();
+    if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
+      izquierda3();
+    }
+    else if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 < umbral_s3 && lec4 >= umbral_s4 && lec5 < umbral_s5) {
+      derecha1();
+    }
   }
 
   //---------01100--------
@@ -238,16 +245,21 @@ void loop() {
 
   //-----------------------------Lectura-00011----------------------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 < umbral_s3 && lec4 >= umbral_s4 && lec5 >= umbral_s5) {
-    derecha3();
-
-    medir();            //vuelve a medir los sensores.
-    if (lec1 < 300 &&  lec2 < 800  && lec3 >= 700 && lec4 >= 800 && lec5 < 700) {
-      izquierda3();
+    while (lec3 < umbral_s3) {
+      derecha3();
+      medir();
     }
-    else if (lec1 < 300 &&  lec2 < 800  && lec3 >= 700 && lec4 < 700 && lec5 < 700) {
-      adelante();
-    }
+    adelante();
   }
+
+  //    medir();            //vuelve a medir los sensores.
+  //    if (lec1 < 300 &&  lec2 < 800  && lec3 >= 700 && lec4 >= 800 && lec5 < 700) {
+  //      izquierda3();
+  //    }
+  //    else if (lec1 < 300 &&  lec2 < 800  && lec3 >= 700 && lec4 < 700 && lec5 < 700) {
+  //      adelante();
+  //    }
+  //  }
 
   //---------11000--------
   //   966  961 591 544 570
@@ -256,16 +268,22 @@ void loop() {
 
   //-----------------------------Lectura-11000----------------------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 < umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-    izquierda3();
-
-    medir();
-    if (lec1 < 300 &&  lec2 >= 800  && lec3 >= 700 && lec4 < 700 && lec5 < 700) {
-      derecha3();
+    while (lec3 < umbral_s3) {
+      izquierda3();
+      medir();
     }
-    else if (lec1 < 300 &&  lec2 < 800  && lec3 >= 700 && lec4 < 700 && lec5 < 700) {
-      adelante();
-    }
+    adelante();
   }
+
+
+
+  //    medir();
+  //    if (lec1 < 300 &&  lec2 >= 800  && lec3 >= 700 && lec4 < 700 && lec5 < 700) {
+  //      derecha3();
+  //    }
+  //    else if (lec1 < 300 &&  lec2 < 800  && lec3 >= 700 && lec4 < 700 && lec5 < 700) {
+  //      adelante();
+  //    }
 
   //---------00111--------
   //  147  753 990 989 969
@@ -296,25 +314,32 @@ void loop() {
 
   //-----------------------------Lectura-10000----------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-
-
-    izquierda3();
-    //    delay(60);
-    //  derecha2(velo);
-    //delay(20);
-    //--
+    while (lec3 < umbral_s3) {
+      izquierda3();
+      medir();
+    }
+    adelante();
   }
+
+  //    delay(60);
+  //  derecha2(velo);
+  //delay(20);
+  //--
+
 
   //-----------------------------Lectura-00001----------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-
-
-    derecha3();
-    //    delay(60);
-    //  derecha2(velo);
-    //delay(20);
-    //--
+    while (lec3 < umbral_s3) {
+      derecha3();
+      medir();
+    }
+    adelante();
   }
+  //    delay(60);
+  //  derecha2(velo);
+  //delay(20);
+  //--
+
   /*
     //----------------------------Lectura-00000------------------------------------
     if(lec1 < 300 &&  lec2 < 800  && lec3 < 800 && lec4 < 800 && lec5 < 800) {

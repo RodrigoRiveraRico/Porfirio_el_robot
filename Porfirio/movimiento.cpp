@@ -81,7 +81,7 @@ void izquierda2_2() {     //Giro de acuerdo al sensor 1 y 2. Motor1 gira hacia a
   digitalWrite(in2, 1);
   digitalWrite(in3, 0);
   digitalWrite(in4, 1);
-  analogWrite(mot1, veloc);
+  analogWrite(mot1, veloci + 10);
   analogWrite(mot2, veloc);
 }
 
@@ -91,7 +91,7 @@ void derecha2_2() {       //Giro de acuerdo al sensor 4 y 5. Motor2 gira hacia a
   digitalWrite(in3, 1);
   digitalWrite(in4, 0);
   analogWrite(mot1, veloc);
-  analogWrite(mot2, veloc);
+  analogWrite(mot2, veloci + 10);
 }
 
 // Giros con una rueda como pivote
