@@ -17,11 +17,3 @@ void izquierda32();
 void derecha32();
 
 void alto();
-
-///////////////sarai
-void izquierda1();
-void derecha1();
-void derecha3();
-void  izquierda3();
-void derecha2();
-void izquierda2();
