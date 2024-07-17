@@ -97,8 +97,8 @@ int umbral_s5 = 800;       //Valor umbral del sensor 5
   int umbral_s2;       //Valor umbral del sensor 2
   int umbral_s3;       //Valor umbral del sensor 3
   int umbral_s4;       //Valor umbral del sensor 4
-  int umbral_s5;       //Valor umbral del sensor 5
-*/
+  int umbral_s5;       //Valor umbral del sensor 5*/
+
 
 
 //-----------------Función para hacer lectura de sensores---------------------------------
@@ -109,7 +109,7 @@ void medir() {
   lec4 = analogRead(sensor_4);     //lee el valor del sensor 1 y almacenalo en lec4
   lec5 = analogRead(sensor_5);     //lee el valor del sensor 1 y almacenalo en lec5
 
-  /* Serial.println("Izquierda_extremo   Izquierda    Centro    Derecha  Derecha_extremo");
+   Serial.println("Izquierda_extremo   Izquierda    Centro    Derecha  Derecha_extremo");
     Serial.print("    ");
     Serial.print(lec1);
     Serial.print("          ");
@@ -123,7 +123,7 @@ void medir() {
     Serial.println("    ");
     Serial.println("    ");
     //delay(300);
-  */
+  
 }
 
 
@@ -133,7 +133,7 @@ void medir() {
 char *song = "Ionian:d=8,o=5,b=240:c,d,e,f,g,a,b,c6";
 
 void setup() {
-  //Serial.begin(9600);     // Comunicación serial apagada cuando se quiera hacer uso del LED. Con comuniación serial activada el LED se queda prendido.
+  Serial.begin(9600);     // Comunicación serial apagada cuando se quiera hacer uso del LED. Con comuniación serial activada el LED se queda prendido.
   pinMode(push, INPUT);   // Push button como entrada
   pinMode(led, OUTPUT);   // LED (azul) como salida
   digitalWrite(led, 0);
@@ -141,14 +141,15 @@ void setup() {
   setup_movimiento();
   alto();
   setup_sensores();
-  /*
-    calibrar();
-    umbral_s1 = UMBRAL_S1();
-    umbral_s2 = UMBRAL_S2();
-    umbral_s3 = UMBRAL_S3();
-    umbral_s4 = UMBRAL_S4();
-    umbral_s5 = UMBRAL_S5();
-  */
+  
+    /*calibrar();
+    umbral_s1 = UMBRAL_S1() - 100;   //umbral = 984
+    umbral_s2 = UMBRAL_S2() - 100;   //umbral = 992
+    umbral_s3 = UMBRAL_S3() - 100;   //umbral = 991
+    umbral_s4 = UMBRAL_S4() - 100;   //umbral = 991
+    umbral_s5 = UMBRAL_S5() - 50;    //umbral = 992
+    */
+  
   //play_rtttl(song);
 }
 
@@ -161,9 +162,10 @@ void loop() {
 
   //----------------------------Lectura-00100------------------------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
+    Serial.print("aqui");
     adelante();
   }
-
+/*
   //----------------------------Lectura-01000------------------------------------
   if (lec1 < umbral_s1 &&  lec2 >= umbral_s2  && lec3 < umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
@@ -183,21 +185,23 @@ void loop() {
     //adelante();
     izquierda12();
   }
-
+*/
   //---------01100--------
   //   216  987 987 591 498
   // 157  748 991 641 608        //Pegado a la ventana
 
   //-----------------------------Lectura-01100-----------------------------------
   if (lec1 < umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-    while (lec3 < umbral_s3) {
+    izquierda1();
+  }
+   /* while (lec3 < umbral_s3) {
       //izquierda12();
       izquierda21(); // Funciona mejor con este giro
       medir();
     }
     //adelante();
     derecha12();
-  }
+  }*/
 
   //---------00110--------
   //  166  683 990 973 701
@@ -205,14 +209,16 @@ void loop() {
 
   //-----------------------------Lectura-00110-----------------------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 >= umbral_s4 && lec5 < umbral_s5) {
-    while (lec3 < umbral_s3) {
+    derecha1();
+  }
+    /*while (lec3 < umbral_s3) {
       //derecha12();
       derecha21(); // Funciona mejor con este giro
       medir();
     }
     //adelante();
     izquierda12();
-  }
+  }*/
 
   //---------00011--------
   //  170  700 557 988 965
@@ -220,12 +226,14 @@ void loop() {
 
   //-----------------------------Lectura-00011----------------------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 < umbral_s3 && lec4 >= umbral_s4 && lec5 >= umbral_s5) {
-    while (lec3 < umbral_s3) {
+    derecha3();
+  }
+    /*while (lec3 < umbral_s3) {
       derecha31();
       medir();
     }
     adelante();
-  }
+  }*/
 
   //---------11000--------
   //   966  961 591 544 570
@@ -234,12 +242,14 @@ void loop() {
 
   //-----------------------------Lectura-11000----------------------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 < umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-    while (lec3 < umbral_s3) {
+    izquierda3();
+  }
+    /*while (lec3 < umbral_s3) {
       izquierda31();
       medir();
     }
     adelante();
-  }
+  }*/
 
   //---------00111--------
   //  147  753 990 989 969
@@ -247,7 +257,7 @@ void loop() {
 
   //-----------------------------Lectura-00111----------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 >= umbral_s3 && lec4 >= umbral_s4 && lec5 >= umbral_s5) {
-    derecha21();
+  derecha2();
   }
 
   //---------11100--------
@@ -256,9 +266,9 @@ void loop() {
 
   //-----------------------------Lectura-11100----------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-    izquierda21();
+    izquierda2();
   }
-
+/*
   //-----------------------------Lectura-10000----------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
@@ -276,7 +286,7 @@ void loop() {
     }
     adelante();
   }
-
+*/
   /*
     //----------------------------Lectura-00000------------------------------------
     if(lec1 < 300 &&  lec2 < 800  && lec3 < 800 && lec4 < 800 && lec5 < 800) {
