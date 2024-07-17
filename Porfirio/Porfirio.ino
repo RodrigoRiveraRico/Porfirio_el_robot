@@ -60,8 +60,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  NOTA: SE BUSCA LA VELOCIDAD MÁXIMA CON LA QUE PUEDE FUNCIONAR EL ROBOT CON PESO.
-//  NOTA 2: TIEMPO QUE TARDA EN DAR UNA VUELTA 16.6 SEGUNDOS.
+//  NOTA 2: TIEMPO QUE TARDA EN DAR UNA VUELTA 15.8 SEGUNDOS.
 //  NOTA 3: Modificación a partir de la versión 5
+//  NOTA 4: En esta version el robot llega a dar vueltas de 90 grados y cambia de dirección
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #include "globales.h"
@@ -182,7 +183,7 @@ void loop() {
 
   //----------------------------Lectura-01000------------------------------------
   if (lec1 < umbral_s1 &&  lec2 >= umbral_s2  && lec3 < umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
-    izquierda3();
+    izquierda2_2();
     //--
     //    delay(20);
     medir();
@@ -198,7 +199,7 @@ void loop() {
 
   //----------------------------Lectura-00010------------------------------------
   if (lec1 < umbral_s1 &&  lec2 < umbral_s2  && lec3 < umbral_s3 && lec4 >= umbral_s4 && lec5 < umbral_s5) {
-    derecha3();
+    derecha2_2();
     //--
     //    delay(20);
   }

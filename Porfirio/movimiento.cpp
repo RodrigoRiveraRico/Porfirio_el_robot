@@ -75,6 +75,25 @@ void derecha2() {       //Giro de acuerdo al sensor 4 y 5. Motor2 gira hacia atr
   analogWrite(mot2, veloci + 10);
 }
 
+// Giros sobre el eje del robot
+void izquierda2_2() {     //Giro de acuerdo al sensor 1 y 2. Motor1 gira hacia atrás. Giro más cerrado.
+  digitalWrite(in1, 0);
+  digitalWrite(in2, 1);
+  digitalWrite(in3, 0);
+  digitalWrite(in4, 1);
+  analogWrite(mot1, veloc);
+  analogWrite(mot2, veloc);
+}
+
+void derecha2_2() {       //Giro de acuerdo al sensor 4 y 5. Motor2 gira hacia atrás. Giro más cerrado.
+  digitalWrite(in1, 1);
+  digitalWrite(in2, 0);
+  digitalWrite(in3, 1);
+  digitalWrite(in4, 0);
+  analogWrite(mot1, veloc);
+  analogWrite(mot2, veloc);
+}
+
 // Giros con una rueda como pivote
 void izquierda3() { //Giro de acuerdo al sensor 1 y 2. Motor1 gira hacia atrás. Frena en seco el Motor1
   digitalWrite(in1, 0);

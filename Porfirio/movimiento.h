@@ -6,6 +6,8 @@ void izquierda1();
 void derecha1();
 void izquierda2();
 void derecha2();
+void izquierda2_2();
+void derecha2_2();
 void izquierda3();
 void derecha3();
 void izquierda3_2();
