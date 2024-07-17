@@ -66,6 +66,8 @@
 //  -> Con el ciclo while en el caso 11000 , 00011 , 10000 , 00001 , 01000 , 00010 , 01100 y 00110 se logra que, al leer blanco el sensor central, haya redirección.
 //  -> Hay que lograr quitar las oscilaciones cuando lee el sensor central y adyacentes (s2,ss3,s4). Se quitó el caso de 01110 con instrucción hacia adelante por que se salía de la pista.
 //  -> Este programa es el que mejor funciona bajo el sol.
+//  -> En este código se modificaron, respecto a la versión 16.2, las condiciones de 10000 y 00001. En lugar de ir hacia adeltante continua con el giro (más suave).
+//  -> La diferencia en tiempos respecto a la versión 16.2 no es apreciable.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #include "globales.h"
@@ -262,7 +264,8 @@ void loop() {
       izquierda33();
       medir();
     }
-    adelante();
+    //adelante();
+    izquierda11();
   }
 
   //-----------------------------Lectura-00001----------------------
@@ -271,7 +274,8 @@ void loop() {
       derecha33();
       medir();
     }
-    adelante();
+    //adelante();
+    derecha11();
   }
 
   /*
