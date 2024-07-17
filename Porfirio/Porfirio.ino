@@ -55,15 +55,17 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                             //
-//                                  ESTE YA SIRVE                                              //
+//                                  ESTE YA SIRVE EN SOMBRA                                    //
+//                                  TAMBIÉN SIRVE BAJO EL SOL                                  //
+//  La calibración funciona sin problemas tomando el 80% de la diferencia entre negro y blanco //
 //                                                                                             //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //
 //  NOTAS:
 //  -> Con el ciclo while en el caso 11000 , 00011 , 10000 , 00001 , 01000 , 00010 , 01100 y 00110 se logra que, al leer blanco el sensor central, haya redirección.
-//  -> Hay que lograr quitar las oscilaciones cuando lee el sensor central y adyacentes (s2,ss3,s4).
-//  -> Este programa es el que mejor funciona bajo el sol, hay que verificar los valores umbrales de los sensores.
+//  -> Hay que lograr quitar las oscilaciones cuando lee el sensor central y adyacentes (s2,ss3,s4). Se quitó el caso de 01110 con instrucción hacia adelante por que se salía de la pista.
+//  -> Este programa es el que mejor funciona bajo el sol.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #include "globales.h"
@@ -79,22 +81,23 @@ int lec2;         //Almacena la lectura del sensor 2
 int lec3;         //Almacena la lectura del sensor 3
 int lec4;         //Almacena la lectura del sensor 4
 int lec5;         //Almacena la lectura del sensor 5
-
-//-------------Umbral con valores fijos------------------------------
-int umbral_s1 = 300;       //Valor umbral del sensor 1
-int umbral_s2 = 800;       //Valor umbral del sensor 2
-int umbral_s3 = 800;       //Valor umbral del sensor 3
-int umbral_s4 = 800;       //Valor umbral del sensor 4
-int umbral_s5 = 900;       //Valor umbral del sensor 5
-
 /*
-  //-----------Umbral con valores calculados en la calibración (ver setup())-------------
-  int umbral_s1;       //Valor umbral del sensor 1
-  int umbral_s2;       //Valor umbral del sensor 2
-  int umbral_s3;       //Valor umbral del sensor 3
-  int umbral_s4;       //Valor umbral del sensor 4
-  int umbral_s5;       //Valor umbral del sensor 5
+  //-------------Umbral con valores fijos------------------------------
+  int umbral_s1 = 300;       //Valor umbral del sensor 1
+  int umbral_s2 = 800;       //Valor umbral del sensor 2
+  int umbral_s3 = 800;       //Valor umbral del sensor 3
+  int umbral_s4 = 800;       //Valor umbral del sensor 4
+  int umbral_s5 = 900;       //Valor umbral del sensor 5
 */
+
+
+//-----------Umbral con valores calculados en la calibración (ver setup())-------------
+int umbral_s1;       //Valor umbral del sensor 1
+int umbral_s2;       //Valor umbral del sensor 2
+int umbral_s3;       //Valor umbral del sensor 3
+int umbral_s4;       //Valor umbral del sensor 4
+int umbral_s5;       //Valor umbral del sensor 5
+
 
 
 //-----------------Función para hacer lectura de sensores---------------------------------
@@ -122,29 +125,23 @@ void medir() {
   */
 }
 
-
-//--------------------------Canción en Buzzer-----------------------------------------
-//IMPORTANTE: Descomentar la canción que se quiera utilizar.
-//char *song = "MissionImp:d=16,o=6,b=95:32d,32d#,32d,32d#,32d,32d#,32d,32d#,32d,32d,32d#,32e,32f,32f#,32g,g,8p,g,8p,a#,p,c7,p,g,8p,g,8p,f,p,f#,p,g,8p,g,8p,a#,p,c7,p,g,8p,g,8p,f,p,f#,p,a#,g,2d,32p,a#,g,2c#,32p,a#,g,2c,a#5,8c,2p,32p,a#5,g5,2f#,32p,a#5,g5,2f,32p,a#5,g5,2e,d#,8d";
-char *song = "Ionian:d=8,o=5,b=240:c,d,e,f,g,a,b,c6";
-
 void setup() {
   //Serial.begin(9600);     // Comunicación serial apagada cuando se quiera hacer uso del LED. Con comuniación serial activada el LED se queda prendido.
-  pinMode(push, INPUT);   // Push button como entrada
-  pinMode(led, OUTPUT);   // LED (azul) como salida
+  pinMode(push, INPUT);     // Push button como entrada
+  pinMode(led, OUTPUT);     // LED (azul) como salida
   digitalWrite(led, 0);
   setup_cancion();
   setup_movimiento();
   alto();
   setup_sensores();
-  /*
-    calibrar();
-    umbral_s1 = UMBRAL_S1();
-    umbral_s2 = UMBRAL_S2();
-    umbral_s3 = UMBRAL_S3();
-    umbral_s4 = UMBRAL_S4();
-    umbral_s5 = UMBRAL_S5();
-  */
+
+  calibrar();
+  umbral_s1 = UMBRAL_S1(); //- 100;
+  umbral_s2 = UMBRAL_S2(); //- 249;
+  umbral_s3 = UMBRAL_S3(); //- 400;
+  umbral_s4 = UMBRAL_S4(); //- 330;
+  umbral_s5 = UMBRAL_S5(); //- 160;
+
 }
 
 void loop() {
@@ -159,14 +156,19 @@ void loop() {
     adelante();
   }
 
+  //----------------------------Lectura 01110------------------------------------
+//  if (lec1 < umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 >= umbral_s4 && lec5 < umbral_s5) {
+//    adelante();
+//  }
+
   //----------------------------Lectura-01000------------------------------------
   if (lec1 < umbral_s1 &&  lec2 >= umbral_s2  && lec3 < umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
       izquierda21();
       medir();
     }
-    //adelante();
-    derecha12();
+    adelante();//<-
+    //derecha12();
   }
 
   //----------------------------Lectura-00010------------------------------------
@@ -175,8 +177,8 @@ void loop() {
       derecha21();
       medir();
     }
-    //adelante();
-    izquierda12();
+    adelante(); //<-
+    //izquierda12();
   }
 
   //---------01100--------
@@ -190,8 +192,8 @@ void loop() {
       izquierda21(); // Funciona mejor con este giro
       medir();
     }
-    //adelante();
-    derecha12();
+    adelante(); //<-
+    //derecha12();
   }
 
   //---------00110--------
@@ -205,8 +207,8 @@ void loop() {
       derecha21(); // Funciona mejor con este giro
       medir();
     }
-    //adelante();
-    izquierda12();
+    adelante();//<-
+    //izquierda12();
   }
 
   //---------00011--------
@@ -257,7 +259,7 @@ void loop() {
   //-----------------------------Lectura-10000----------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
-      izquierda31();
+      izquierda33();
       medir();
     }
     adelante();
@@ -266,7 +268,7 @@ void loop() {
   //-----------------------------Lectura-00001----------------------
   if (lec1 >= umbral_s1 &&  lec2 >= umbral_s2  && lec3 >= umbral_s3 && lec4 < umbral_s4 && lec5 < umbral_s5) {
     while (lec3 < umbral_s3) {
-      derecha31();
+      derecha33();
       medir();
     }
     adelante();

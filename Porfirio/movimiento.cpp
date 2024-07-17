@@ -120,3 +120,15 @@ void derecha32() {       //Motor2 gira hacia atrás. Frena en seco el Motor2
   analogWrite(mot1, veloc - 10);
   analogWrite(mot2, veloci - 10);
 }
+void izquierda33() {    //Motor1 gira hacia atrás. Frena en seco el Motor1
+  motor1_atras();
+  motor2_adelante();
+  analogWrite(mot1, veloci);
+  analogWrite(mot2, veloc+10);
+}
+void derecha33() {       //Motor2 gira hacia atrás. Frena en seco el Motor2
+  motor1_adelante();
+  motor2_atras();
+  analogWrite(mot1, veloc+10);
+  analogWrite(mot2, veloci);
+}
